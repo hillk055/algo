@@ -53,15 +53,27 @@
 import sys
 import math
 import random
-import os
 import time as chrono
 import csv
 from datetime import datetime
+
 import torch
+import uuid
 import joblib
 import numpy as np
 import torch.nn as nn
-# Define the same model class used during training
+import os
+import builtins
+
+# disable printing because it takes longer to run the code with print
+
+
+# create a unique identifier to save files when using multiprocessing
+save_id = uuid.uuid4().hex[:8]
+
+save_path=f"results/session_{save_id}"
+
+os.makedirs(save_path, exist_ok=True)
 
 
 class LSTMTraderModel(nn.Module):
@@ -2996,7 +3008,7 @@ def market_session(sess_id, starttime, endtime, trader_spec, order_schedule, dum
         :param trdrs: the population of traders.
         :return: <nothing>
         """
-        bdump = open(session_id + '_blotters.csv', 'w')
+        bdump = open(f'results/session_{save_id}/blotters.csv', 'w')
         for trdr in trdrs:
             bdump.write('%s, %d\n' % (trdrs[trdr].tid, len(trdrs[trdr].blotter)))
             for b in trdrs[trdr].blotter:
@@ -3012,7 +3024,7 @@ def market_session(sess_id, starttime, endtime, trader_spec, order_schedule, dum
     populate_verbose = False
 
     if dumpfile_flags['dump_strats']:
-        strat_dump = open(sess_id + '_strats.csv', 'w')
+        strat_dump = open(f'results/session_{save_id}/strats.csv', 'w')
     else:
         strat_dump = None
 
@@ -3022,13 +3034,13 @@ def market_session(sess_id, starttime, endtime, trader_spec, order_schedule, dum
         lobframes = None
 
     if dumpfile_flags['dump_avgbals']:
-        avg_bals = open(sess_id + '_avg_balance.csv', 'w')
+        avg_bals = open(f'results/session_{save_id}/avg_balance.csv', 'w')
     else:
         avg_bals = None
 
     if dumpfile_flags['dump_tape']:
         # NB writing transactions only -- not writing cancellations
-        tape_dump = open(sess_id + '_tape.csv', 'w')
+        tape_dump = open(f'results/session_{save_id}/tape.csv', 'w')
     else:
         tape_dump = None
 
@@ -3152,7 +3164,7 @@ if __name__ == "__main__":
     # set up common parameters for all market sessions
     # 1000 days is often good, but 3*365=1095, so may as well go for three years.
     n_days = 1
-    hours_in_a_day = 24  # how many hours the exchange operates for in a working day (e.g. NYSE = 7.5)
+    hours_in_a_day = 1  # how many hours the exchange operates for in a working day (e.g. NYSE = 7.5)
     start_time = 0.0
     end_time = 60.0 * 60.0 * hours_in_a_day * n_days
     duration = end_time - start_time
