@@ -3,9 +3,9 @@ import subprocess
 
 
 def run_bse(_):
-    # Launch one BSE instance using your virtual environment and full path
+    
     subprocess.run([
-        "/Users/keeganhill/GetLifeTogether/Algo/.venv/bin/python",  # Update if needed
+        "/Users/keeganhill/GetLifeTogether/Algo/.venv/bin/python",  
         "/Users/keeganhill/Documents/ALGO/BristolStockExchange-master/bse.py"
     ])
 
