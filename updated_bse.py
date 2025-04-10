@@ -65,8 +65,7 @@ import torch.nn as nn
 import os
 import builtins
 
-# disable printing because it takes longer to run the code with print
-
+builtins.print = lambda *args, **kwargs: None
 
 # create a unique identifier to save files when using multiprocessing
 save_id = uuid.uuid4().hex[:8]
@@ -3155,7 +3154,7 @@ def market_session(sess_id, starttime, endtime, trader_spec, order_schedule, dum
 
 if __name__ == "__main__":
 
-    price_offset_filename = '/Users/keeganhill/Documents/ALGO/offset_BTC_USD_20250210.csv'
+    price_offset_filename = '/Users/keeganhill/Documents/ALGO/offset_BTC_USD_20250211.csv'
 
     # if called from the command line with one argument, the first argument is the price offset filename
     if len(sys.argv) > 1:
@@ -3163,8 +3162,8 @@ if __name__ == "__main__":
 
     # set up common parameters for all market sessions
     # 1000 days is often good, but 3*365=1095, so may as well go for three years.
-    n_days = 1
-    hours_in_a_day = 1  # how many hours the exchange operates for in a working day (e.g. NYSE = 7.5)
+    n_days = 50
+    hours_in_a_day = 24  # how many hours the exchange operates for in a working day (e.g. NYSE = 7.5)
     start_time = 0.0
     end_time = 60.0 * 60.0 * hours_in_a_day * n_days
     duration = end_time - start_time
@@ -3350,7 +3349,7 @@ if __name__ == "__main__":
         trial_id = 'bse_d%03d_i%02d_%04d' % (n_days, order_interval, trial)
 
         # buyer_spec specifies the strategies played by buyers, and for each strategy how many such buyers to create
-        buyers_spec = [('SHVR', 2), ('GVWY', 2), ('ZIC', 2), ('ZIP',2)]
+        buyers_spec = [('SHVR', 1), ('GVWY', 1), ('ZIC', 2), ('ZIP',13)]
         #     ('PRZI', 5, {'s_min': -1.0, 's_max': +1.0})]
 
         # seller_spec specifies the strategies played by sellers, and for each strategy how many such sellers to create
